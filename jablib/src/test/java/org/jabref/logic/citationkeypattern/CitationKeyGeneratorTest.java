@@ -917,7 +917,6 @@ class CitationKeyGeneratorTest {
     @Test
     void checkLegalNullInNullOut() {
         assertThrows(NullPointerException.class, () -> CitationKeyGenerator.cleanKey(null, DEFAULT_UNWANTED_CHARACTERS));
-        assertThrows(NullPointerException.class, () -> CitationKeyGenerator.cleanKey(null, DEFAULT_UNWANTED_CHARACTERS));
     }
 
     @ParameterizedTest
@@ -963,16 +962,18 @@ class CitationKeyGeneratorTest {
         assertEquals("GSo", generateKey(entry1, "[shorttitleINI]", database));
     }
 
-    @Test
-    void generateKeyStripsColonFromTitle() {
-        BibEntry entry = new BibEntry().withField(StandardField.TITLE, "Green Scheduling of: Whatever");
-        assertEquals("GreenSchedulingOf:Whatever", generateKey(entry, "[title]"));
+    @ParameterizedTest
+    @MethodSource("generateKeyStripsSpecialCharsData")
+    void generateKeyStripsSpecialCharsFromTitle(String title, String expected) {
+        BibEntry entry = new BibEntry().withField(StandardField.TITLE, title);
+        assertEquals(expected, generateKey(entry, "[title]"));
     }
 
-    @Test
-    void generateKeyStripsApostropheFromTitle() {
-        BibEntry entry = new BibEntry().withField(StandardField.TITLE, "Green Scheduling of `Whatever`");
-        assertEquals("GreenSchedulingofWhatever", generateKey(entry, "[title]"));
+    static Stream<Arguments> generateKeyStripsSpecialCharsData() {
+        return Stream.of(
+                Arguments.of("Green Scheduling of: Whatever", "GreenSchedulingOf:Whatever"),
+                Arguments.of("Green Scheduling of `Whatever`", "GreenSchedulingofWhatever")
+        );
     }
 
     @Test
@@ -1110,18 +1111,19 @@ class CitationKeyGeneratorTest {
         assertEquals("2021", generateKey(bibEntry, "[title:([EPRINT:([YEAR])])]"));
     }
 
-    @Test
-    void generateKeyWithLowercaseAuthorLastnameUseVonPart() {
-        BibEntry entry = createABibEntryAuthor("Stéphane d'Ascoli");
+    @ParameterizedTest
+    @MethodSource("generateKeyWithLowercaseAuthorData")
+    void generateKeyWithLowercaseAuthor(String author, String expected) {
+        BibEntry entry = createABibEntryAuthor(author);
         entry.setField(StandardField.YEAR, "2021");
-        assertEquals("dAscoli2021", generateKey(entry, "[auth][year]"));
+        assertEquals(expected, generateKey(entry, "[auth][year]"));
     }
 
-    @Test
-    void generateKeyWithLowercaseAuthorWithVonAndLastname() {
-        BibEntry entry = createABibEntryAuthor("Michiel van den Brekel");
-        entry.setField(StandardField.YEAR, "2021");
-        assertEquals("Brekel2021", generateKey(entry, "[auth][year]"));
+    static Stream<Arguments> generateKeyWithLowercaseAuthorData() {
+        return Stream.of(
+                Arguments.of("Stéphane d'Ascoli", "dAscoli2021"),
+                Arguments.of("Michiel van den Brekel", "Brekel2021")
+        );
     }
 
     @Test
