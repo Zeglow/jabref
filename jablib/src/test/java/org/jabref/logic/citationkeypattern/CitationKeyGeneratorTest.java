@@ -609,16 +609,12 @@ class CitationKeyGeneratorTest {
 
     static Stream<Arguments> nAuthors1Data() {
         return Stream.of(
+                Arguments.of(AUTHOR_EMPTY, ""),
                 Arguments.of(AUTHOR_FIRSTNAME_INITIAL_LASTNAME_FULL_COUNT_1, "Newton"),
                 Arguments.of(AUTHOR_FIRSTNAME_INITIAL_LASTNAME_FULL_COUNT_2, "NewtonEtAl"),
                 Arguments.of(AUTHOR_FIRSTNAME_INITIAL_LASTNAME_FULL_COUNT_3, "NewtonEtAl"),
                 Arguments.of(AUTHOR_FIRSTNAME_INITIAL_LASTNAME_FULL_COUNT_4, "NewtonEtAl")
         );
-    }
-
-    @Test
-    void nAuthors1EmptyReturnEmpty() {
-        assertEquals("", generateKey(AUTHOR_EMPTY, AUTHORN.formatted(1)));
     }
 
     /**
