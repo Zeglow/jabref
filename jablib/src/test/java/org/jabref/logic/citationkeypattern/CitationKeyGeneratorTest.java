@@ -912,7 +912,6 @@ class CitationKeyGeneratorTest {
         assertEquals("w1", generateKey(entry1, "[keyword1]", database));
     }
 
-    // It seems this one is the same as keywordNKeywordsSeparatedBySpace
     @ParameterizedTest
     @MethodSource("keywordsNData")
     void keywordsNKeywordsSeparatedBySpace(String pattern, String expected) {
