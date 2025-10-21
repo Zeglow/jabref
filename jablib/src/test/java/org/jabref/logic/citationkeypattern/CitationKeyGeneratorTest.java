@@ -1021,17 +1021,13 @@ class CitationKeyGeneratorTest {
     }
 
     @ParameterizedTest
-    @MethodSource("generateKeyStripsSpecialCharsData")
+    @CsvSource({
+            "'Green Scheduling of: Whatever', 'GreenSchedulingOf:Whatever'",
+            "'Green Scheduling of `Whatever`', 'GreenSchedulingofWhatever'"
+    })
     void generateKeyStripsSpecialCharsFromTitle(String title, String expected) {
         BibEntry entry = new BibEntry().withField(StandardField.TITLE, title);
         assertEquals(expected, generateKey(entry, "[title]"));
-    }
-
-    static Stream<Arguments> generateKeyStripsSpecialCharsData() {
-        return Stream.of(
-                Arguments.of("Green Scheduling of: Whatever", "GreenSchedulingOf:Whatever"),
-                Arguments.of("Green Scheduling of `Whatever`", "GreenSchedulingofWhatever")
-        );
     }
 
     @Test
