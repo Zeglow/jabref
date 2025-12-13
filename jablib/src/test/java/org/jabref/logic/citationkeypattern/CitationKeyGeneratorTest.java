@@ -176,7 +176,7 @@ class CitationKeyGeneratorTest {
             "@ARTICLE{kohn, author={Andrés D'Alessandro}, year={2000}}", "DAl",
             "@ARTICLE{kohn, author={Andrés Aʹrnold}, year={2000}}", "Arn"
             """)
-    void makeLabelAndCheckLegalKeys(String expectedResult, String bibtexString) throws ParseException {
+    void makeLabelAndCheckLegalKeys(String bibtexString, String expectedResult) throws ParseException {
         BibEntry bibEntry = BibtexParser.singleFromString(bibtexString, importFormatPreferences).get();
         String citationKey = generateKey(bibEntry, "[auth3]", new BibDatabase());
 
@@ -777,7 +777,7 @@ class CitationKeyGeneratorTest {
                 # check out of range
                 [keyword4], ''
             """)
-    void keywordNKeywordsSeparatedBySpace(String expected, String pattern) {
+    void keywordNKeywordsSeparatedBySpace(String pattern, String expected) {
         BibEntry entry = new BibEntry().withField(StandardField.KEYWORDS, "w1, w2a w2b, w3");
         assertEquals(expected, generateKey(entry, pattern));
     }
@@ -1020,7 +1020,7 @@ class CitationKeyGeneratorTest {
 
     @ParameterizedTest
     @MethodSource("generateKeyWithLowercaseAuthorData")
-    void generateKeyWithLowercaseAuthor(String expected, String author) {
+    void generateKeyWithLowercaseAuthor(String author, String expected) {
         BibEntry entry = createABibEntryAuthor(author);
         entry.setField(StandardField.YEAR, "2021");
         assertEquals(expected, generateKey(entry, "[auth][year]"));
