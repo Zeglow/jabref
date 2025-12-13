@@ -338,7 +338,7 @@ class CitationKeyGeneratorTest {
 
     @ParameterizedTest
     @MethodSource("authIniN")
-    void authIniN(BibEntry entry, String pattern, String expected) {
+    void authIniN(String expected, BibEntry entry, String pattern) {
         assertEquals(expected, generateKey(entry, pattern));
     }
 
@@ -360,7 +360,7 @@ class CitationKeyGeneratorTest {
      */
     @ParameterizedTest
     @MethodSource("authAuthEa")
-    void authAuthEa(BibEntry entry, String expected) {
+    void authAuthEa(String expected, BibEntry entry) {
         assertEquals(expected, generateKey(entry, AUTHAUTHEA));
     }
 
@@ -383,7 +383,7 @@ class CitationKeyGeneratorTest {
      */
     @ParameterizedTest
     @MethodSource("authEtAl")
-    void authEtAl(BibEntry entry, String pattern, String expected) {
+    void authEtAl(String expected, BibEntry entry, String pattern) {
         assertEquals(expected, generateKey(entry, pattern));
     }
 
@@ -401,7 +401,7 @@ class CitationKeyGeneratorTest {
      */
     @ParameterizedTest
     @MethodSource("authShort")
-    void authShort(BibEntry entry, String expected) {
+    void authShort(String expected, BibEntry entry) {
         assertEquals(expected, generateKey(entry, AUTHSHORT));
     }
 
@@ -428,7 +428,7 @@ class CitationKeyGeneratorTest {
      */
     @ParameterizedTest
     @MethodSource("authNM")
-    void authNM(BibEntry entry, int n, int m, String expected) {
+    void authNM(String expected, BibEntry entry, int n, int m) {
         String pattern = AUTHNOFMTH.formatted(n, m);
         assertEquals(expected, generateKey(entry, pattern));
     }
@@ -463,7 +463,7 @@ class CitationKeyGeneratorTest {
      */
     @ParameterizedTest
     @MethodSource("firstAuthorVonAndLast")
-    void firstAuthorVonAndLast(BibEntry entry, String expected) {
+    void firstAuthorVonAndLast(String expected, BibEntry entry) {
         assertEquals(expected, generateKey(entry, AUTHFIRSTFULL));
     }
 
@@ -476,7 +476,7 @@ class CitationKeyGeneratorTest {
 
     @ParameterizedTest
     @MethodSource("firstAuthorVonAndLastNoVonInName")
-    void firstAuthorVonAndLastNoVonInName(BibEntry entry, String expected) {
+    void firstAuthorVonAndLastNoVonInName(String expected, BibEntry entry) {
         assertEquals(expected, generateKey(entry, AUTHFIRSTFULL));
     }
 
@@ -512,7 +512,7 @@ class CitationKeyGeneratorTest {
      */
     @ParameterizedTest
     @MethodSource("lastAuthor")
-    void lastAuthor(BibEntry entry, String expected) {
+    void lastAuthor(String expected, BibEntry entry) {
         assertEquals(expected, generateKey(entry, AUTHORLAST));
     }
 
@@ -533,7 +533,7 @@ class CitationKeyGeneratorTest {
      */
     @ParameterizedTest
     @MethodSource("lastAuthorForenameInitials")
-    void lastAuthorForenameInitials(BibEntry entry, String expected) {
+    void lastAuthorForenameInitials(String expected, BibEntry entry) {
         assertEquals(expected, generateKey(entry, AUTHORLASTFOREINI));
     }
 
@@ -542,7 +542,7 @@ class CitationKeyGeneratorTest {
      */
     @ParameterizedTest
     @MethodSource("oneAuthorPlusIniData")
-    void oneAuthorPlusIni(BibEntry entry, String expected) {
+    void oneAuthorPlusIni(String expected, BibEntry entry) {
         assertEquals(expected, generateKey(entry, AUTHORINI));
     }
 
@@ -563,7 +563,7 @@ class CitationKeyGeneratorTest {
      */
     @ParameterizedTest
     @MethodSource("nAuthors1Data")
-    void nAuthors1(BibEntry entry, String expected) {
+    void nAuthors1(String expected, BibEntry entry) {
         assertEquals(expected, generateKey(entry, AUTHORN.formatted(1)));
     }
 
@@ -582,7 +582,7 @@ class CitationKeyGeneratorTest {
      */
     @ParameterizedTest
     @MethodSource("nAuthors3Data")
-    void nAuthors3(BibEntry entry, String expected) {
+    void nAuthors3(String expected, BibEntry entry) {
         assertEquals(expected, generateKey(entry, AUTHORN.formatted(3)));
     }
 
@@ -606,7 +606,7 @@ class CitationKeyGeneratorTest {
                 41,7,73--97, 7
                 43+,        43
             """)
-    void firstPage(String input, String expected) {
+    void firstPage(String expected, String input) {
         assertEquals(expected, CitationKeyGenerator.firstPage(input));
     }
 
@@ -636,7 +636,7 @@ class CitationKeyGeneratorTest {
                 41,7,73--97,    ''
                 43+,            ''
             """)
-    void pagePrefix(String input, String expected) {
+    void pagePrefix(String expected, String input) {
         assertEquals(expected, CitationKeyGenerator.pagePrefix(input));
     }
 
@@ -659,7 +659,7 @@ class CitationKeyGeneratorTest {
                 00--0,       0
                 1--1,        1
             """)
-    void lastPage(String input, String expected) {
+    void lastPage(String expected, String input) {
         assertEquals(expected, CitationKeyGenerator.lastPage(input));
     }
 
@@ -674,7 +674,7 @@ class CitationKeyGeneratorTest {
      */
     @ParameterizedTest
     @MethodSource("veryShortTitleData")
-    void veryShortTitle(String titleString, String expected) {
+    void veryShortTitle(String expected, String titleString) {
         // veryShortTitle is getTitleWords with "1" as count
         int count = 1;
         assertEquals(expected,
@@ -700,7 +700,7 @@ class CitationKeyGeneratorTest {
      */
     @ParameterizedTest
     @MethodSource("shortTitleData")
-    void shortTitle(String titleString, String expected) {
+    void shortTitle(String expected, String titleString) {
         // shortTitle is getTitleWords with "3" as count and removed small words
         int count = 3;
         assertEquals(expected,
@@ -726,7 +726,7 @@ class CitationKeyGeneratorTest {
      */
     @ParameterizedTest
     @MethodSource("camelData")
-    void camel(String titleString, String expected) {
+    void camel(String expected, String titleString) {
         // camel capitalises and concatenates all the words of the title
         assertEquals(expected, CitationKeyGenerator.getCamelizedTitle(titleString));
     }
@@ -749,7 +749,7 @@ class CitationKeyGeneratorTest {
      */
     @ParameterizedTest
     @MethodSource("titleData")
-    void title(String titleString, String expected) {
+    void title(String expected, String titleString) {
         // title capitalises the significant words of the title
         // for the title case the concatenation happens at formatting, which is tested in MakeLabelWithDatabaseTest.java
         assertEquals(expected, CitationKeyGenerator.camelizeSignificantWordsInTitle(titleString));
@@ -796,7 +796,7 @@ class CitationKeyGeneratorTest {
 
     @ParameterizedTest
     @MethodSource("keywordsNData")
-    void keywordsNKeywordsSeparatedBySpace(String pattern, String expected) {
+    void keywordsNKeywordsSeparatedBySpace(String expected, String pattern) {
         BibEntry entry = new BibEntry().withField(StandardField.KEYWORDS, "w1, w2a w2b, w3");
         assertEquals(expected, generateKey(entry, pattern));
     }
@@ -825,7 +825,7 @@ class CitationKeyGeneratorTest {
 
     @ParameterizedTest
     @MethodSource("checkLegalKeyUnwantedCharactersData")
-    void checkLegalKeyUnwantedCharacters(String input, String expected) {
+    void checkLegalKeyUnwantedCharacters(String expected, String input) {
         assertEquals(expected, CitationKeyGenerator.cleanKey(input, DEFAULT_UNWANTED_CHARACTERS));
     }
 
@@ -839,7 +839,7 @@ class CitationKeyGeneratorTest {
 
     @ParameterizedTest
     @MethodSource("checkLegalKeyNoUnwantedCharactersData")
-    void checkLegalKeyNoUnwantedCharacters(String input, String expected) {
+    void checkLegalKeyNoUnwantedCharacters(String expected, String input) {
         assertEquals(expected, CitationKeyGenerator.cleanKey(input, ""));
     }
 
@@ -858,7 +858,7 @@ class CitationKeyGeneratorTest {
 
     @ParameterizedTest
     @MethodSource("applyModifiersData")
-    void applyModifiers(String pattern, String expected) {
+    void applyModifiers(String expected, String pattern) {
         BibEntry entry = new BibEntry().withField(StandardField.TITLE, "Green Scheduling of Whatever");
         assertEquals(expected, generateKey(entry, pattern, new BibDatabase()));
     }
@@ -897,7 +897,7 @@ class CitationKeyGeneratorTest {
             "'Green Scheduling of: Whatever', 'GreenSchedulingOf:Whatever'",
             "'Green Scheduling of `Whatever`', 'GreenSchedulingofWhatever'"
     })
-    void generateKeyStripsSpecialCharsFromTitle(String title, String expected) {
+    void generateKeyStripsSpecialCharsFromTitle(String expected, String title) {
         BibEntry entry = new BibEntry().withField(StandardField.TITLE, title);
         assertEquals(expected, generateKey(entry, "[title]"));
     }
